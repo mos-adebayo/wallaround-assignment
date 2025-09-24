@@ -24,12 +24,10 @@ export type APIConfig = {
   endpoint?: string;
 };
 
-export type FilterJSON = Group;
-
 export type FilterBuilderProps = {
   schema: Field[];
   operators: OperatorConfig;
-  initial?: FilterJSON;
+  initial?: Group;
   api?: APIConfig;
-  onChange?: (json: FilterJSON, qs?: string) => void;
+  onChange?: (json: Group, qs?: string) => void;
 };

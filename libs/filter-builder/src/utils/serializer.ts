@@ -1,6 +1,6 @@
-import type { Group, Rule, FilterJSON, Condition } from "../types";
+import type { Group, Rule, Condition } from "../types";
 
-export function serializeToQueryString(json: FilterJSON) {
+export function serializeToQueryString(json: Group) {
   // simple compact encoding: base64 of JSON
   const str = JSON.stringify(json);
   try {
@@ -11,7 +11,7 @@ export function serializeToQueryString(json: FilterJSON) {
   }
 }
 
-export function deserializeFromQueryString(qs: string): FilterJSON | null {
+export function deserializeFromQueryString(qs: string): Group | null {
   const m = qs.match(/filter=([^&]+)/);
   if (!m) return null;
   try {
@@ -33,13 +33,15 @@ export function emptyGroup(type: Condition = "and"): Group {
 }
 
 // validation helper
-export function validateCondition(cond: Rule): boolean {
+export function validateRule(cond: Rule): boolean {
   if (!cond.field || !cond.operator) return false;
   if (cond.operator === "between") {
-    return Array.isArray(cond.value) && cond.value.length === 2;
+    const values = cond.value?.split(",");
+    return Array.isArray(values) && values.length === 2;
   }
   if (cond.operator === "in") {
-    return Array.isArray(cond.value) && cond.value.length >= 1;
+    const values = cond.value?.split(",");
+    return Array.isArray(values) && values.length >= 1;
   }
   if (cond.operator === "is null" || cond.operator === "is not null") {
     return cond.value === undefined || cond.value === null;

@@ -15,6 +15,7 @@ const userFields: Field[] = [
     ],
   },
   { name: "isActive", label: "Active", type: "boolean" },
+  { name: "DOB", label: "DOB", type: "date" },
 ];
 
 const productFields: Field[] = [

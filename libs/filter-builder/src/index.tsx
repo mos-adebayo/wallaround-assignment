@@ -1,9 +1,9 @@
 import React from "react";
-import type { FilterBuilderProps, FilterJSON } from "./types";
+import { FilterBuilderProps, Group, Rule } from "./types";
 import { GroupEditor } from "./components/GroupEditor";
 import {
   emptyGroup,
-  validateCondition,
+  validateRule,
   serializeToQueryString,
 } from "./utils/serializer";
 
@@ -14,32 +14,29 @@ export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   api,
   onChange,
 }) => {
-  const [root, setRoot] = React.useState<FilterJSON>(
-    initial ?? emptyGroup("and"),
-  );
+  const [root, setRoot] = React.useState<Group>(initial ?? emptyGroup("and"));
 
   React.useEffect(() => {
     const qs = api?.mode === "GET" ? serializeToQueryString(root) : undefined;
     onChange?.(root, qs);
   }, [root]);
 
-  function updateRoot(g: FilterJSON) {
+  function updateRoot(g: Group) {
     setRoot(g);
   }
 
-  function validateAll(g: FilterJSON): boolean {
-    // function walk(node: FilterJSON | any): boolean {
-    //   for (const c of node.children) {
-    //     if (c.children) {
-    //       if (!walk(c)) return false;
-    //     } else {
-    //       if (!validateCondition(c)) return false;
-    //     }
-    //   }
-    //   return true;
-    // }
-    // return walk(g);
-
+  function validateAll(node: Group | Rule): boolean {
+    if ("and" in node) {
+      for (const child of node.and) {
+        if (!validateAll(child)) return false;
+      }
+    } else if ("or" in node) {
+      for (const child of node.or) {
+        if (!validateAll(child)) return false;
+      }
+    } else {
+      if (!validateRule(node as Rule)) return false;
+    }
     return true;
   }
 
