@@ -1,4 +1,4 @@
-import type { Group, Condition, FilterJSON} from "../../types";
+import type { Group, Condition, FilterJSON } from "../../types";
 
 export function serializeToQueryString(json: FilterJSON) {
   // simple compact encoding: base64 of JSON
