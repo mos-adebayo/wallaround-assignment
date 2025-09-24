@@ -1,0 +1,9 @@
+{
+  "defaultBase": "main",
+  "parallel": 1,
+  "targetDefaults": {
+    "format": {
+      "cache": true
+    }
+  }
+}

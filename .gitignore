@@ -1,0 +1,28 @@
+node_modules
+*.log
+*.DS_Store
+
+# test coverage
+test-coverage
+
+# Nx-related files and directories
+.nx
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# build related
+tsconfig.tsbuildinfo
+libs/**/dist
+libs/**/lib
+apps/**/dist
+
+dist

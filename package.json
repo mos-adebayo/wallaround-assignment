@@ -1,0 +1,21 @@
+{
+  "name": "@wallaround/root",
+  "version": "1.0.0",
+  "description": "Dataset‑agnostic Filter Builder UI library ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "nx affected -t format"
+  },
+  "keywords": [],
+  "author": "Moses Adebayo",
+  "license": "ISC",
+  "workspaces": ["libs/*", "apps/*"],
+  "engines": {
+    "node": ">=20.17.0",
+    "npm": ">=10.2.3"
+  },
+  "devDependencies": {
+    "nx": "^19.8.14"
+  }
+}
