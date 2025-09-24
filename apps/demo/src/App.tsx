@@ -46,7 +46,7 @@ const ops: OperatorConfig = {
   number: ["eq", "neq", "gt", "lt", "between", "in"],
   boolean: ["eq", "neq", "is null", "is not null"],
   date: ["eq", "neq", "before", "after", "between"],
-  select: ["eq", "neq", "in"] as any,
+  select: ["eq", "neq", "in"],
 };
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
           <h2 className="text-xl font-bold mb-4">Users</h2>
           <FilterBuilder
             schema={userFields}
-            operators={ops as any}
+            operators={ops}
             onChange={(json, qs) => setLast(JSON.stringify({ json, qs }))}
             api={{ mode: "GET" }}
           />
@@ -71,7 +71,7 @@ function App() {
           <h2 className="text-xl font-bold mb-4">Products</h2>
           <FilterBuilder
             schema={productFields}
-            operators={ops as any}
+            operators={ops}
             onChange={(json, qs) => setLast(JSON.stringify({ json, qs }))}
             api={{ mode: "POST", endpoint: "/api/products/filter" }}
           />
