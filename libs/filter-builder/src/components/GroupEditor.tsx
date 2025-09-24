@@ -142,5 +142,3 @@ export const GroupEditor: React.FC<Props> = ({
     </fieldset>
   );
 };
-
-export default GroupEditor;
