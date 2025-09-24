@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
     "format": "prettier --write 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {

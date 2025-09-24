@@ -4,7 +4,8 @@
   "description": "Dataset‑agnostic Filter Builder UI library ",
   "scripts": {
     "format": "nx affected -t format",
-    "format:all": "nx run-many --target=format --all"
+    "format:all": "nx run-many --target=format --all",
+    "type-check": "nx affected -t type-check"
   },
   "keywords": [],
   "author": "Moses Adebayo",

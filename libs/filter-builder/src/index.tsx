@@ -1,11 +1,11 @@
 import React from "react";
-import type { FilterBuilderProps, FilterJSON } from "../types";
-import { GroupEditor } from "./components/GroupEditor.tsx";
+import type { FilterBuilderProps, FilterJSON } from "./types";
+import { GroupEditor } from "./components/GroupEditor";
 import {
   emptyGroup,
   validateCondition,
   serializeToQueryString,
-} from "./utils/serializer.ts";
+} from "./utils/serializer";
 
 export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   schema,

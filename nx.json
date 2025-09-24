@@ -4,6 +4,9 @@
   "targetDefaults": {
     "format": {
       "cache": true
+    },
+    "type-check": {
+      "cache": true
     }
   }
 }
