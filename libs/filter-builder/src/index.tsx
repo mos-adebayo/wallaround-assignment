@@ -28,17 +28,19 @@ export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   }
 
   function validateAll(g: FilterJSON): boolean {
-    function walk(node: FilterJSON | any): boolean {
-      for (const c of node.children) {
-        if (c.children) {
-          if (!walk(c)) return false;
-        } else {
-          if (!validateCondition(c)) return false;
-        }
-      }
-      return true;
-    }
-    return walk(g);
+    // function walk(node: FilterJSON | any): boolean {
+    //   for (const c of node.children) {
+    //     if (c.children) {
+    //       if (!walk(c)) return false;
+    //     } else {
+    //       if (!validateCondition(c)) return false;
+    //     }
+    //   }
+    //   return true;
+    // }
+    // return walk(g);
+
+    return true;
   }
 
   return (

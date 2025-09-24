@@ -1,11 +1,11 @@
 import React from "react";
-import type { Field, Condition } from "../types";
+import type { Field, Rule } from "../types";
 
 type Props = {
   fields: Field[];
   operators: Record<string, string[]>;
-  value: Condition;
-  onChange: (c: Condition) => void;
+  value: Rule;
+  onChange: (c: Rule) => void;
   onRemove: () => void;
 };
 

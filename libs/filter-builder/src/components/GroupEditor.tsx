@@ -1,5 +1,5 @@
 import React from "react";
-import type { Field, Group, Condition } from "../types";
+import type { Condition, Field, Group, Rule } from "../types";
 import { ConditionRow } from "./ConditionRow";
 import { emptyGroup } from "../utils/serializer";
 
@@ -18,45 +18,78 @@ export const GroupEditor: React.FC<Props> = ({
   onChange,
   onRemove,
 }) => {
-  function updateChild(i: number, child: Group | Condition) {
-    const copy = { ...node, children: [...node.children] };
-    copy.children[i] = child;
-    onChange(copy);
+  const rootKey = Object.keys(node)[0] as Condition;
+  const ruleList: Array<Rule | Group> = "or" in node ? node.or : node.and;
+
+  function updateChild(i: number, child: Group | Rule) {
+    const newList = [...ruleList];
+    newList[i] = child;
+
+    if ("and" in node) {
+      onChange({ and: newList });
+    } else {
+      onChange({ or: newList });
+    }
   }
   function addCondition() {
-    const cond: Condition = {
+    const newRule: Rule = {
       field: fields[0].name,
       operator: operators[fields[0].type][0],
       value: undefined,
     };
-    onChange({ ...node, children: [...node.children, cond] });
+
+    if ("and" in node) {
+      onChange({ and: [...node.and, newRule] });
+    } else {
+      onChange({ or: [...node.or, newRule] });
+    }
   }
   function addGroup() {
-    onChange({ ...node, children: [...node.children, emptyGroup("and")] });
+    const newGroup = emptyGroup("and");
+    if ("and" in node) {
+      onChange({ and: [...node.and, newGroup] });
+    } else {
+      onChange({ or: [...node.or, newGroup] });
+    }
   }
   function removeAt(i: number) {
-    const copy = { ...node, children: [...node.children] };
-    copy.children.splice(i, 1);
-    onChange(copy);
+    if ("and" in node) {
+      const newList = [...node.and];
+      newList.splice(i, 1);
+      onChange({ and: newList });
+    } else {
+      const newList = [...node.or];
+      newList.splice(i, 1);
+      onChange({ or: newList });
+    }
+  }
+
+  function changeGroupType(newType: "and" | "or") {
+    if (newType === rootKey) return;
+
+    if (newType === "and") {
+      onChange({ and: ruleList });
+    } else if (newType === "or") {
+      onChange({ or: ruleList });
+    }
   }
 
   return (
     <fieldset
       className="border rounded-lg p-4 my-4 bg-gray-50"
-      aria-label={`group-${node.type}`}
+      aria-label={`group-${rootKey}`}
     >
       <legend className="font-semibold flex items-center gap-2">
         <select
-          value={node.type}
-          onChange={(e) =>
-            onChange({ ...node, type: e.target.value as "and" | "or" })
-          }
+          value={rootKey}
+          onChange={(e) => changeGroupType(e.target.value as "and" | "or")}
           aria-label="group-type"
           className="border rounded px-2 py-1"
         >
           <option value="and">AND</option>
           <option value="or">OR</option>
         </select>
+
         {onRemove && (
           <button
             aria-label="remove-group"
@@ -69,22 +102,22 @@ export const GroupEditor: React.FC<Props> = ({
       </legend>
 
       <div className="space-y-2 mt-2">
-        {node.children.map((c, i) => (
+        {ruleList.map((ruleGroup, i) => (
           <div key={i}>
-            {"children" in c ? (
-              <GroupEditor
-                fields={fields}
-                operators={operators}
-                node={c}
-                onChange={(g) => updateChild(i, g)}
-                onRemove={() => removeAt(i)}
-              />
-            ) : (
+            {"field" in ruleGroup ? (
               <ConditionRow
                 fields={fields}
                 operators={operators}
-                value={c}
+                value={ruleGroup}
                 onChange={(cond) => updateChild(i, cond)}
+                onRemove={() => removeAt(i)}
+              />
+            ) : (
+              <GroupEditor
+                fields={fields}
+                operators={operators}
+                node={ruleGroup}
+                onChange={(g) => updateChild(i, g)}
                 onRemove={() => removeAt(i)}
               />
             )}

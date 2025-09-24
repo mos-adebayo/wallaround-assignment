@@ -1,4 +1,4 @@
-import type { Group, Condition, FilterJSON } from "../types";
+import type { Group, Rule, FilterJSON, Condition } from "../types";
 
 export function serializeToQueryString(json: FilterJSON) {
   // simple compact encoding: base64 of JSON
@@ -28,12 +28,12 @@ export function deserializeFromQueryString(qs: string): FilterJSON | null {
   }
 }
 
-export function emptyGroup(type: "and" | "or" = "and"): Group {
-  return { type, children: [] };
+export function emptyGroup(type: Condition = "and"): Group {
+  return type === "and" ? { and: [] } : { or: [] };
 }
 
 // validation helper
-export function validateCondition(cond: Condition): boolean {
+export function validateCondition(cond: Rule): boolean {
   if (!cond.field || !cond.operator) return false;
   if (cond.operator === "between") {
     return Array.isArray(cond.value) && cond.value.length === 2;

@@ -9,16 +9,15 @@ export type FieldType = "string" | "number" | "boolean" | "date" | "select";
 
 export type OperatorConfig = Record<FieldType, string[]>;
 
-export type Condition = {
+export type Rule = {
   field: string;
   operator: string;
   value?: any;
 };
 
-export type Group = {
-  type: "and" | "or";
-  children: Array<Group | Condition>;
-};
+export type Condition = "or" | "and";
+
+export type Group = { and: Array<Rule | Group> } | { or: Array<Rule | Group> };
 
 export type APIConfig = {
   mode: "GET" | "POST";
