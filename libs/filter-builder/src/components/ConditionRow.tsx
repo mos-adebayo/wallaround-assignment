@@ -51,8 +51,8 @@ export const ConditionRow: FC<Props> = ({
   }, [fields, value.field]);
 
   return (
-    <Grid container spacing={{ xs: 2 }} alignItems="stretch">
-      <Grid size={{ xs: 3 }}>
+    <Grid container spacing={{ xs: 1, lg: 2 }} alignItems="stretch">
+      <Grid size={{ xs: 6, lg: 3 }} order={{ xs: 2, lg: 1 }}>
         <InputLabel htmlFor="field">Name</InputLabel>
         <Autocomplete
           freeSolo={false}
@@ -73,7 +73,7 @@ export const ConditionRow: FC<Props> = ({
         />
       </Grid>
 
-      <Grid size={{ xs: 3 }}>
+      <Grid size={{ xs: 6, lg: 3 }} order={{ xs: 3, lg: 2 }}>
         <InputLabel htmlFor="field">Operator</InputLabel>
         <Autocomplete
           freeSolo={false}
@@ -94,7 +94,7 @@ export const ConditionRow: FC<Props> = ({
         />
       </Grid>
 
-      <Grid size={{ xs: 4 }}>
+      <Grid size={{ xs: 12, lg: 4 }} order={{ xs: 4, lg: 3 }}>
         <InputLabel htmlFor="field">Value(s)</InputLabel>
         {selectedField?.type === "select" ? (
           <TextField
@@ -125,7 +125,7 @@ export const ConditionRow: FC<Props> = ({
         )}
       </Grid>
 
-      <Grid size={{ xs: 2 }}>
+      <Grid size={{ xs: 12, lg: 2 }} order={{ xs: 1, lg: 4 }}>
         <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
           <Button
             onClick={onRemove}
@@ -133,6 +133,7 @@ export const ConditionRow: FC<Props> = ({
             size="small"
             color="secondary"
             startIcon={"X"}
+            sx={{ p: 0 }}
           >
             &nbsp;Remove
           </Button>

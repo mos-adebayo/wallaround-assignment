@@ -81,9 +81,9 @@ export const GroupEditor: React.FC<Props> = ({
 
   return (
     <Stack gap={1.5}>
-      <Grid container spacing={{ xs: 2 }} alignItems="stretch">
+      <Grid container spacing={{ xs: 1, lg: 2 }} alignItems="stretch">
         {showGroupCondition && (
-          <Grid size={{ xs: 10 }}>
+          <Grid size={{ xs: 12, lg: 10 }} order={{ xs: 2, lg: 1 }}>
             <Stack direction="row" gap={1} alignItems="center">
               <Typography variant="body2">CONDITION:</Typography>
               <Button
@@ -107,7 +107,7 @@ export const GroupEditor: React.FC<Props> = ({
         )}
 
         {onRemove && (
-          <Grid size={{ xs: 2 }}>
+          <Grid size={{ xs: 12, lg: 2 }} order={{ xs: 1, lg: 2 }}>
             <Button
               size="small"
               onClick={onRemove}

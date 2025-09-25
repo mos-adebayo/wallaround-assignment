@@ -58,7 +58,7 @@ function App() {
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" mb={2}>Wallaround: Filter Builder</Typography>
       <Stack gap={2}>
-        <Stack component="section">
+        <Stack gap={2} component="section">
           <Typography variant="h5">Users (GET Action)</Typography>
           <FilterBuilder
             schema={userFields}
@@ -70,7 +70,7 @@ function App() {
 
         <Divider />
 
-        <Stack component="section">
+        <Stack gap={2} component="section">
           <Typography variant="h5">Products (POST Action)</Typography>
           <FilterBuilder
             schema={productFields}
@@ -92,7 +92,7 @@ function App() {
                 overflowX: "auto",
               }}
           >
-            {lastEmit}
+            {lastEmit || "No emit yet!"}
           </Typography>
         </Stack>
       </Stack>
