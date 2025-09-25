@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FilterBuilder } from "@wallaround/filter-builder";
 import type { Field, OperatorConfig } from "@wallaround/filter-builder";
+import { Container, Stack, Typography } from "@mui/material";
 
 const userFields: Field[] = [
   { name: "name", label: "Name", type: "string" },
@@ -54,38 +55,37 @@ function App() {
   const [last, setLast] = useState<string>("");
 
   return (
-    <>
-      <h1>Filter Builder</h1>
-
-      <div className="max-w-5xl mx-auto p-6 space-y-10">
-        <section>
-          <h2 className="text-xl font-bold mb-4">Users</h2>
+    <Container sx={{ py: 4 }}>
+      <Typography variant="h4" mb={2}>Wallaround: Filter Builder</Typography>
+      <Stack gap={1}>
+        <Stack component="section" gap={1}>
+          <Typography variant="h5">Users</Typography>
           <FilterBuilder
             schema={userFields}
             operators={ops}
             onChange={(json, qs) => setLast(JSON.stringify({ json, qs }))}
             api={{ mode: "GET" }}
           />
-        </section>
+        </Stack>
 
-        <section>
-          <h2 className="text-xl font-bold mb-4">Products</h2>
+        <Stack component="section" gap={1}>
+          <Typography variant="h5">Products</Typography>
           <FilterBuilder
             schema={productFields}
             operators={ops}
             onChange={(json, qs) => setLast(JSON.stringify({ json, qs }))}
             api={{ mode: "POST", endpoint: "/api/products/filter" }}
           />
-        </section>
+        </Stack>
 
-        <section>
-          <h3 className="text-lg font-semibold">Last emitted</h3>
+        <Stack component="section" gap={1}>
+          <Typography variant="h5">Last emitted</Typography>
           <pre className="bg-gray-800 text-gray-100 text-xs p-3 rounded mt-2">
             {last}
           </pre>
-        </section>
-      </div>
-    </>
+        </Stack>
+      </Stack>
+    </Container>
   );
 }
 

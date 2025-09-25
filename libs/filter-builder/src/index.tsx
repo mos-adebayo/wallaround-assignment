@@ -1,11 +1,14 @@
 import React from "react";
-import { FilterBuilderProps, Group, Rule } from "./types";
+import { ThemeProvider } from "@mui/material/styles";
+import type { FilterBuilderProps, Group, Rule } from "./types";
 import { GroupEditor } from "./components/GroupEditor";
 import {
   emptyGroup,
   validateRule,
   serializeToQueryString,
 } from "./utils/serializer";
+import theme from "./theme";
+import { Stack, Typography } from "@mui/material";
 
 export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   schema,
@@ -41,22 +44,31 @@ export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   }
 
   return (
-    <div className="border rounded-xl bg-white shadow-md p-4 space-y-4">
-      <GroupEditor
-        fields={schema}
-        operators={operators}
-        node={root}
-        onChange={updateRoot}
-      />
-      <div className="text-sm text-gray-600">
-        <strong>Valid:</strong> {String(validateAll(root))}
-      </div>
-      <pre
-        aria-label="serialized"
-        className="max-h-60 overflow-auto bg-gray-100 text-xs p-3 rounded"
-      >
-        {JSON.stringify(root, null, 2)}
-      </pre>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Stack gap={1}>
+        <GroupEditor
+          fields={schema}
+          operators={operators}
+          node={root}
+          onChange={updateRoot}
+        />
+        <Typography>
+          <strong>Valid:</strong> {String(validateAll(root))}
+        </Typography>
+
+        <Typography
+          component="pre"
+          sx={{
+            fontFamily: "Monospace",
+            backgroundColor: "#f5f5f5",
+            padding: 2,
+            borderRadius: 1,
+            overflowX: "auto",
+          }}
+        >
+          {JSON.stringify(root, null, 2)}
+        </Typography>
+      </Stack>
+    </ThemeProvider>
   );
 };

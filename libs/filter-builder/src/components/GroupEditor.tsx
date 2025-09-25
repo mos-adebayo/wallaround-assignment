@@ -2,6 +2,7 @@ import React from "react";
 import type { Condition, Field, Group, Rule } from "../types";
 import { ConditionRow } from "./ConditionRow";
 import { emptyGroup } from "../utils/serializer";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 
 type Props = {
   fields: Field[];
@@ -74,6 +75,133 @@ export const GroupEditor: React.FC<Props> = ({
     }
   }
 
+  const isGroupORConditioned = rootKey === "or";
+  const isGroupANDConditioned = rootKey === "and";
+  const showGroupCondition = ruleList?.length > 1;
+
+  return (
+    <Stack gap={1.5}>
+      {showGroupCondition && (
+        <Stack direction="row" gap={1} alignItems="center">
+          <Typography variant="body2">CONDITION:</Typography>
+          <Button
+            size="small"
+            onClick={() => changeGroupType("or")}
+            color={"info"}
+            variant={isGroupORConditioned ? "contained" : "outlined"}
+          >
+            OR
+          </Button>
+          <Button
+            size="small"
+            onClick={() => changeGroupType("and")}
+            color="info"
+            variant={isGroupANDConditioned ? "contained" : "outlined"}
+          >
+            AND
+          </Button>
+        </Stack>
+      )}
+
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="stretch"
+        sx={{ pl: showGroupCondition ? 1 : 0 }}
+      >
+        {/* Left vertical line with AND */}
+
+        {showGroupCondition && (
+          <Box
+            sx={{
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{
+                borderRightWidth: 1,
+                borderColor: "info.main",
+                "&::before, &::after": {
+                  content: '""',
+                  position: "absolute",
+                  width: "10px",
+                  height: "1px",
+                  backgroundColor: "info.main",
+                  left: "0px",
+                },
+                "&::before": { top: 0 },
+                "&::after": { bottom: 0 },
+              }}
+            />
+
+            <Typography
+              variant="body2"
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "0",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "white",
+                color: "info.main",
+                px: 1,
+                textTransform: "uppercase",
+              }}
+            >
+              {rootKey}
+            </Typography>
+          </Box>
+        )}
+
+        <Stack gap={1.5} sx={{ flex: 1, pl: showGroupCondition ? 1 : 0 }}>
+          {ruleList.map((ruleGroup, i) => (
+            <div key={i}>
+              {"field" in ruleGroup ? (
+                <ConditionRow
+                  fields={fields}
+                  operators={operators}
+                  value={ruleGroup}
+                  onChange={(cond) => updateChild(i, cond)}
+                  onRemove={() => removeAt(i)}
+                />
+              ) : (
+                <GroupEditor
+                  fields={fields}
+                  operators={operators}
+                  node={ruleGroup}
+                  onChange={(g) => updateChild(i, g)}
+                  onRemove={() => removeAt(i)}
+                />
+              )}
+            </div>
+          ))}
+        </Stack>
+      </Stack>
+
+      <Stack direction="row" gap={2}>
+        <Button
+          size="small"
+          onClick={addCondition}
+          color="secondary"
+          variant="contained"
+        >
+          Add Rule
+        </Button>
+
+        <Button
+          size="small"
+          onClick={addGroup}
+          color="secondary"
+          variant="contained"
+        >
+          Add Group
+        </Button>
+      </Stack>
+    </Stack>
+  );
   return (
     <fieldset
       className="border rounded-lg p-4 my-4 bg-gray-50"
