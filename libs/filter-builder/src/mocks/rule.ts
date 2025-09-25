@@ -9,7 +9,33 @@ export const mockGroup: Group = {
   ],
 };
 
+export const mockORGroup: Group = {
+  and: [
+    {
+      field: "name",
+      operator: "eq",
+    },
+  ],
+};
+
 export const mockRuleGroup: Group = {
+  and: [
+    {
+      field: "name",
+      operator: "eq",
+    },
+    {
+      field: "age",
+      operator: "eq",
+    },
+    {
+      field: "active",
+      operator: "is not null",
+    },
+  ],
+};
+
+export const mockRuleMultiGroup: Group = {
   and: [
     {
       field: "name",
