@@ -2,7 +2,7 @@ export type Field = {
   name: string;
   label: string;
   type: FieldType;
-  options?: { label: string; value: string | number | boolean }[];
+  options?: { label: string; value: string | number }[];
 };
 
 export type FieldType = "string" | "number" | "boolean" | "date" | "select";

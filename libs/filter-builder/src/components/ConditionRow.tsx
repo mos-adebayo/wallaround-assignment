@@ -1,8 +1,9 @@
-import React from "react";
+import { FC, useMemo } from "react";
+import { useEffect } from "react";
 import type { Field, Rule } from "../types";
 import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Box, Button, InputLabel, TextField } from "@mui/material";
+import { Box, Button, InputLabel, MenuItem, TextField } from "@mui/material";
 
 type Props = {
   fields: Field[];
@@ -12,7 +13,7 @@ type Props = {
   onRemove: () => void;
 };
 
-export const ConditionRow: React.FC<Props> = ({
+export const ConditionRow: FC<Props> = ({
   fields,
   operators,
   value,
@@ -22,7 +23,7 @@ export const ConditionRow: React.FC<Props> = ({
   const field = fields.find((f) => f.name === value.field) || fields[0];
   const ops = field ? operators[field.type] || [] : [];
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!value.field && fields[0])
       onChange({ ...value, field: fields[0].name });
   }, []);
@@ -36,13 +37,26 @@ export const ConditionRow: React.FC<Props> = ({
     });
   }
 
+  const valueType = useMemo(() => {
+    const field = fields.find((f) => f.name === value.field);
+    if (!field || value.operator === "between" || value.operator === "in") {
+      return "text";
+    }
+
+    return field.type;
+  }, [value.operator, value.field]);
+
+  const selectedField = useMemo(() => {
+    return fields.find((f) => f.name === value.field);
+  }, [fields, value.field]);
+
   return (
     <Grid container spacing={{ xs: 2 }} alignItems="stretch">
       <Grid size={{ xs: 3 }}>
         <InputLabel htmlFor="field">Name</InputLabel>
         <Autocomplete
           freeSolo={false}
-          value={fields.find((f) => f.name === value.field)}
+          value={selectedField}
           disableClearable
           size="small"
           options={fields}
@@ -82,14 +96,33 @@ export const ConditionRow: React.FC<Props> = ({
 
       <Grid size={{ xs: 4 }}>
         <InputLabel htmlFor="field">Value(s)</InputLabel>
-        <TextField
-          fullWidth
-          name="ruleName"
-          size="small"
-          placeholder="Values separated with comma"
-          value={value.value ?? ""}
-          onChange={(e) => onChange({ ...value, value: e.target.value })}
-        />
+        {selectedField?.type === "select" ? (
+          <TextField
+            select
+            name="documentType"
+            value={value.value ?? ""}
+            size="small"
+            fullWidth
+            sx={{ minWidth: { xs: 50, lg: 100 } }}
+            onChange={(e) => onChange({ ...value, value: e.target.value })}
+          >
+            {selectedField?.options?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        ) : (
+          <TextField
+            fullWidth
+            name="ruleName"
+            size="small"
+            placeholder="Values separated with comma"
+            value={value.value ?? ""}
+            type={valueType}
+            onChange={(e) => onChange({ ...value, value: e.target.value })}
+          />
+        )}
       </Grid>
 
       <Grid size={{ xs: 2 }}>
