@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { FilterBuilder } from "@wallaround/filter-builder";
 import type { Field, OperatorConfig } from "@wallaround/filter-builder";
-import {Container, Divider, Stack, Typography} from "@mui/material";
+import { Container, Divider, Stack, Typography } from "@mui/material";
 
 const userFields: Field[] = [
-  { name: "name", label: "Name", type: "string" },
+  { name: "name", label: "Name", type: "text" },
   { name: "age", label: "Age", type: "number" },
   {
     name: "role",
@@ -20,7 +20,7 @@ const userFields: Field[] = [
 ];
 
 const productFields: Field[] = [
-  { name: "title", label: "Title", type: "string" },
+  { name: "title", label: "Title", type: "text" },
   { name: "price", label: "Price", type: "number" },
   {
     name: "category",
@@ -35,7 +35,7 @@ const productFields: Field[] = [
 ];
 
 const ops: OperatorConfig = {
-  string: [
+  text: [
     "eq",
     "neq",
     "contains",
@@ -56,7 +56,9 @@ function App() {
 
   return (
     <Container sx={{ py: 4 }}>
-      <Typography variant="h4" mb={2}>Wallaround: Filter Builder</Typography>
+      <Typography variant="h4" mb={2}>
+        Wallaround: Filter Builder
+      </Typography>
       <Stack gap={2}>
         <Stack gap={2} component="section">
           <Typography variant="h5">Users (GET Action)</Typography>
@@ -83,14 +85,14 @@ function App() {
         <Stack component="section" gap={1}>
           <Typography variant="h5">Last emitted</Typography>
           <Typography
-              component="pre"
-              sx={{
-                fontFamily: "Monospace",
-                backgroundColor: "#f5f5f5",
-                padding: 2,
-                borderRadius: 1,
-                overflowX: "auto",
-              }}
+            component="pre"
+            sx={{
+              fontFamily: "Monospace",
+              backgroundColor: "#f5f5f5",
+              padding: 2,
+              borderRadius: 1,
+              overflowX: "auto",
+            }}
           >
             {lastEmit || "No emit yet!"}
           </Typography>

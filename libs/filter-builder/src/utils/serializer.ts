@@ -11,7 +11,7 @@ function base64Encode(str: string) {
 
 export function serializeToQueryString(json: Group) {
   const str = JSON.stringify(json);
-  return `filter=${encodeURIComponent(base64Encode(str))}`;
+  return `${encodeURIComponent(base64Encode(str))}`;
 }
 
 function base64Decode(b64: string) {
@@ -24,11 +24,9 @@ function base64Decode(b64: string) {
 }
 
 export function deserializeFromQueryString(qs: string): Group | null {
-  const params = new URLSearchParams(qs);
-  const filter = params.get("filter");
-  if (!filter) return null;
+  if (!qs) return null;
 
-  return JSON.parse(base64Decode(decodeURIComponent(filter)));
+  return JSON.parse(base64Decode(decodeURIComponent(qs)));
 }
 
 export function initialGroupData(
@@ -37,27 +35,10 @@ export function initialGroupData(
   type: Condition = "and",
 ): Group {
   const initialField = fields[0];
-  const initialOperator = operators[initialField.type][0] || "";
+  const initialOperator = operators[initialField?.type]?.[0] || "eq";
 
   const initialRule = initialField
     ? [{ field: initialField.name, operator: initialOperator }]
     : [];
   return type === "and" ? { and: initialRule } : { or: initialRule };
-}
-
-// validation helper
-export function validateRule(cond: Rule): boolean {
-  if (!cond.field || !cond.operator) return false;
-  if (cond.operator === "between") {
-    const values = cond.value?.split(",");
-    return Array.isArray(values) && values.length === 2;
-  }
-  if (cond.operator === "in") {
-    const values = cond.value?.split(",");
-    return Array.isArray(values) && values.length >= 1;
-  }
-  if (cond.operator === "is null" || cond.operator === "is not null") {
-    return cond.value === undefined || cond.value === null;
-  }
-  return cond.value !== undefined && cond.value !== null && cond.value !== "";
 }

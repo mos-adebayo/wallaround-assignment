@@ -5,9 +5,9 @@ export type Field = {
   options?: { label: string; value: string | number }[];
 };
 
-export type FieldType = "string" | "number" | "boolean" | "date" | "select";
+export type FieldType = "text" | "number" | "boolean" | "date" | "select";
 
-export type OperatorConfig = Record<FieldType, string[]>;
+export type OperatorConfig = Partial<Record<FieldType, string[]>>;
 
 export type Rule = {
   field: string;

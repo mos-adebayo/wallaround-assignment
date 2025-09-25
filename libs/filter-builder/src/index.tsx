@@ -3,14 +3,11 @@ import type { FC } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import type { FilterBuilderProps, Group, Rule } from "./types";
 import { GroupEditor } from "./components/GroupEditor";
-import {
-  validateRule,
-  serializeToQueryString,
-  initialGroupData,
-} from "./utils/serializer";
+import { serializeToQueryString, initialGroupData } from "./utils/serializer";
 import theme from "./theme";
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 import { getAction, postAction } from "./utils/api";
+import { validateRule } from "./utils/rule";
 
 export const FilterBuilder: FC<FilterBuilderProps> = ({
   schema,
