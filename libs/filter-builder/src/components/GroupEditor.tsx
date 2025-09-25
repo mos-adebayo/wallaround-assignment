@@ -2,7 +2,7 @@ import React from "react";
 import type { Condition, Field, Group, Rule } from "../types";
 import { ConditionRow } from "./ConditionRow";
 import { emptyGroup } from "../utils/serializer";
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography, Grid } from "@mui/material";
 
 type Props = {
   fields: Field[];
@@ -81,27 +81,44 @@ export const GroupEditor: React.FC<Props> = ({
 
   return (
     <Stack gap={1.5}>
-      {showGroupCondition && (
-        <Stack direction="row" gap={1} alignItems="center">
-          <Typography variant="body2">CONDITION:</Typography>
-          <Button
-            size="small"
-            onClick={() => changeGroupType("or")}
-            color={"info"}
-            variant={isGroupORConditioned ? "contained" : "outlined"}
-          >
-            OR
-          </Button>
-          <Button
-            size="small"
-            onClick={() => changeGroupType("and")}
-            color="info"
-            variant={isGroupANDConditioned ? "contained" : "outlined"}
-          >
-            AND
-          </Button>
-        </Stack>
-      )}
+      <Grid container spacing={{ xs: 2 }} alignItems="stretch">
+        {showGroupCondition && (
+          <Grid size={{ xs: 10 }}>
+            <Stack direction="row" gap={1} alignItems="center">
+              <Typography variant="body2">CONDITION:</Typography>
+              <Button
+                size="small"
+                onClick={() => changeGroupType("or")}
+                color={"info"}
+                variant={isGroupORConditioned ? "contained" : "outlined"}
+              >
+                OR
+              </Button>
+              <Button
+                size="small"
+                onClick={() => changeGroupType("and")}
+                color="info"
+                variant={isGroupANDConditioned ? "contained" : "outlined"}
+              >
+                AND
+              </Button>
+            </Stack>
+          </Grid>
+        )}
+
+        {onRemove && (
+          <Grid size={{ xs: 2 }}>
+            <Button
+              size="small"
+              onClick={onRemove}
+              color="info"
+              variant="outlined"
+            >
+              Remove group
+            </Button>
+          </Grid>
+        )}
+      </Grid>
 
       <Stack
         direction="row"
@@ -109,8 +126,6 @@ export const GroupEditor: React.FC<Props> = ({
         alignItems="stretch"
         sx={{ pl: showGroupCondition ? 1 : 0 }}
       >
-        {/* Left vertical line with AND */}
-
         {showGroupCondition && (
           <Box
             sx={{
@@ -145,7 +160,7 @@ export const GroupEditor: React.FC<Props> = ({
                 top: "50%",
                 left: "0",
                 transform: "translate(-50%, -50%)",
-                backgroundColor: "white",
+                backgroundColor: "#FAFAFA",
                 color: "info.main",
                 px: 1,
                 textTransform: "uppercase",
@@ -201,72 +216,5 @@ export const GroupEditor: React.FC<Props> = ({
         </Button>
       </Stack>
     </Stack>
-  );
-  return (
-    <fieldset
-      className="border rounded-lg p-4 my-4 bg-gray-50"
-      aria-label={`group-${rootKey}`}
-    >
-      <legend className="font-semibold flex items-center gap-2">
-        <select
-          value={rootKey}
-          onChange={(e) => changeGroupType(e.target.value as "and" | "or")}
-          aria-label="group-type"
-          className="border rounded px-2 py-1"
-        >
-          <option value="and">AND</option>
-          <option value="or">OR</option>
-        </select>
-
-        {onRemove && (
-          <button
-            aria-label="remove-group"
-            onClick={onRemove}
-            className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Remove group
-          </button>
-        )}
-      </legend>
-
-      <div className="space-y-2 mt-2">
-        {ruleList.map((ruleGroup, i) => (
-          <div key={i}>
-            {"field" in ruleGroup ? (
-              <ConditionRow
-                fields={fields}
-                operators={operators}
-                value={ruleGroup}
-                onChange={(cond) => updateChild(i, cond)}
-                onRemove={() => removeAt(i)}
-              />
-            ) : (
-              <GroupEditor
-                fields={fields}
-                operators={operators}
-                node={ruleGroup}
-                onChange={(g) => updateChild(i, g)}
-                onRemove={() => removeAt(i)}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-4 flex gap-2">
-        <button
-          onClick={addCondition}
-          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          + Condition
-        </button>
-        <button
-          onClick={addGroup}
-          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          + Group
-        </button>
-      </div>
-    </fieldset>
   );
 };

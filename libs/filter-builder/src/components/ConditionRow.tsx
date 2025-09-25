@@ -1,5 +1,8 @@
 import React from "react";
 import type { Field, Rule } from "../types";
+import Grid from "@mui/material/Grid";
+import Autocomplete from "@mui/material/Autocomplete";
+import { Box, Button, InputLabel, TextField } from "@mui/material";
 
 type Props = {
   fields: Field[];
@@ -34,51 +37,75 @@ export const ConditionRow: React.FC<Props> = ({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 p-2 bg-white shadow rounded-lg">
-      <select
-        aria-label="field"
-        value={value.field}
-        onChange={(e) => setField(e.target.value)}
-        className="border rounded px-2 py-1"
-      >
-        {fields.map((f) => (
-          <option key={f.name} value={f.name}>
-            {f.label}
-          </option>
-        ))}
-      </select>
+    <Grid container spacing={{ xs: 2 }} alignItems="stretch">
+      <Grid size={{ xs: 3 }}>
+        <InputLabel htmlFor="field">Name</InputLabel>
+        <Autocomplete
+          freeSolo={false}
+          value={fields.find((f) => f.name === value.field)}
+          disableClearable
+          size="small"
+          options={fields}
+          getOptionLabel={(option) => {
+            if (!option) {
+              return "";
+            }
+            return option.label;
+          }}
+          onChange={(_, val) => {
+            setField(val.name);
+          }}
+          renderInput={(params) => <TextField {...params} variant="outlined" />}
+        />
+      </Grid>
 
-      <select
-        aria-label="operator"
-        value={value.operator}
-        onChange={(e) =>
-          onChange({ ...value, operator: e.target.value, value: undefined })
-        }
-        className="border rounded px-2 py-1"
-      >
-        {ops.map((op) => (
-          <option key={op} value={op}>
-            {op}
-          </option>
-        ))}
-      </select>
+      <Grid size={{ xs: 3 }}>
+        <InputLabel htmlFor="field">Operator</InputLabel>
+        <Autocomplete
+          freeSolo={false}
+          value={value.operator}
+          disableClearable
+          size="small"
+          options={ops}
+          getOptionLabel={(option) => {
+            if (!option) {
+              return "";
+            }
+            return option;
+          }}
+          onChange={(_, val) => {
+            onChange({ ...value, operator: val, value: undefined });
+          }}
+          renderInput={(params) => <TextField {...params} variant="outlined" />}
+        />
+      </Grid>
 
-      <input
-        aria-label="value"
-        type="text"
-        value={value.value ?? ""}
-        onChange={(e) => onChange({ ...value, value: e.target.value })}
-        className="border rounded px-2 py-1 flex-1"
-      />
+      <Grid size={{ xs: 4 }}>
+        <InputLabel htmlFor="field">Value(s)</InputLabel>
+        <TextField
+          fullWidth
+          name="ruleName"
+          size="small"
+          placeholder="Values separated with comma"
+          value={value.value ?? ""}
+          onChange={(e) => onChange({ ...value, value: e.target.value })}
+        />
+      </Grid>
 
-      <button
-        aria-label="remove-condition"
-        onClick={onRemove}
-        className="ml-2 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-      >
-        ✕
-      </button>
-    </div>
+      <Grid size={{ xs: 2 }}>
+        <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+          <Button
+            onClick={onRemove}
+            variant="text"
+            size="small"
+            color="secondary"
+            startIcon={"X"}
+          >
+            &nbsp;Remove
+          </Button>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

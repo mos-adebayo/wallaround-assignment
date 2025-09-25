@@ -84,13 +84,9 @@ const Button: Components<Theme>["MuiButton"] = {
       padding: "0.6rem 2rem",
       borderRadius: "20px",
       lineHeight: "1.5rem",
-      textTransform: "uppercase",
       boxShadow: "none",
       ".MuiButton-startIcon": {
         marginRight: "0",
-      },
-      "@media (min-width: 1200px)": {
-        textTransform: "uppercase !important",
       },
     },
   },

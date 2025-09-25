@@ -18,7 +18,9 @@ const theme = createTheme({
   },
   components: {
     MuiButton: Components.Button,
+    MuiInputLabel: Components.InputLabel,
   },
 });
 
 export default theme;
+export type Theme = typeof theme;
