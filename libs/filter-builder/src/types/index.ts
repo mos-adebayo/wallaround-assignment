@@ -1,5 +1,5 @@
 export type Field = {
-  name: string;
+  value: string;
   label: string;
   type: FieldType;
   options?: { label: string; value: string | number }[];

@@ -38,7 +38,7 @@ export function initialGroupData(
   const initialOperator = operators[initialField?.type]?.[0] || "eq";
 
   const initialRule = initialField
-    ? [{ field: initialField.name, operator: initialOperator }]
+    ? [{ field: initialField.value, operator: initialOperator }]
     : [];
   return type === "and" ? { and: initialRule } : { or: initialRule };
 }

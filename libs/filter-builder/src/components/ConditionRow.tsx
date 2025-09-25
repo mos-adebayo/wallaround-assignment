@@ -20,16 +20,16 @@ export const ConditionRow: FC<Props> = ({
   onChange,
   onRemove,
 }) => {
-  const field = fields.find((f) => f.name === value.field) || fields[0];
+  const field = fields.find((f) => f.value === value.field) || fields[0];
   const ops = field ? operators[field.type] || [] : [];
 
   useEffect(() => {
     if (!value.field && fields[0])
-      onChange({ ...value, field: fields[0].name });
+      onChange({ ...value, field: fields[0].value });
   }, []);
 
   function setField(name: string) {
-    const f = fields.find((ff) => ff.name === name)!;
+    const f = fields.find((ff) => ff.value === name)!;
     onChange({
       field: name,
       operator: (operators[f.type] && operators[f.type][0]) || "eq",
@@ -38,7 +38,7 @@ export const ConditionRow: FC<Props> = ({
   }
 
   const valueType = useMemo(() => {
-    const field = fields.find((f) => f.name === value.field);
+    const field = fields.find((f) => f.value === value.field);
     if (!field || value.operator === "between" || value.operator === "in") {
       return "text";
     }
@@ -47,13 +47,13 @@ export const ConditionRow: FC<Props> = ({
   }, [value.operator, value.field]);
 
   const selectedField = useMemo(() => {
-    return fields.find((f) => f.name === value.field);
+    return fields.find((f) => f.value === value.field);
   }, [fields, value.field]);
 
   return (
     <Grid container spacing={{ xs: 1, lg: 2 }} alignItems="stretch">
       <Grid size={{ xs: 6, lg: 3 }} order={{ xs: 2, lg: 1 }}>
-        <InputLabel htmlFor="field">Name</InputLabel>
+        <InputLabel htmlFor="field">Field</InputLabel>
         <Autocomplete
           freeSolo={false}
           value={selectedField}
@@ -67,9 +67,15 @@ export const ConditionRow: FC<Props> = ({
             return option.label;
           }}
           onChange={(_, val) => {
-            setField(val.name);
+            setField(val.value);
           }}
-          renderInput={(params) => <TextField {...params} variant="outlined" />}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select field"
+              variant="outlined"
+            />
+          )}
         />
       </Grid>
 
@@ -90,7 +96,13 @@ export const ConditionRow: FC<Props> = ({
           onChange={(_, val) => {
             onChange({ ...value, operator: val, value: undefined });
           }}
-          renderInput={(params) => <TextField {...params} variant="outlined" />}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select operator"
+              variant="outlined"
+            />
+          )}
         />
       </Grid>
 
@@ -117,7 +129,7 @@ export const ConditionRow: FC<Props> = ({
             fullWidth
             name="ruleName"
             size="small"
-            placeholder="Values separated with comma"
+            placeholder="Separate multiple values with comma"
             value={value.value ?? ""}
             type={valueType}
             onChange={(e) => onChange({ ...value, value: e.target.value })}

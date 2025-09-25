@@ -29,3 +29,11 @@ export const mockRuleGroup: Group = {
     },
   ],
 };
+
+export const mockRule = { field: "name", operator: "eq", value: "test" };
+
+export const mockOperators = {
+  select: ["eq", "ne"],
+  number: ["gt", "lt"],
+  text: ["contains", "eq"],
+};

@@ -34,7 +34,7 @@ export const GroupEditor: React.FC<Props> = ({
   }
   function addCondition() {
     const newRule: Rule = {
-      field: fields[0].name,
+      field: fields[0].value,
       operator: operators[fields[0]?.type]?.[0] || "text",
       value: undefined,
     };

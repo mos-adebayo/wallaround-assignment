@@ -4,10 +4,10 @@ import type { Field, OperatorConfig } from "@wallaround/filter-builder";
 import { Container, Divider, Stack, Typography } from "@mui/material";
 
 const userFields: Field[] = [
-  { name: "name", label: "Name", type: "text" },
-  { name: "age", label: "Age", type: "number" },
+  { value: "name", label: "Name", type: "text" },
+  { value: "age", label: "Age", type: "number" },
   {
-    name: "role",
+    value: "role",
     label: "Role",
     type: "select",
     options: [
@@ -15,15 +15,15 @@ const userFields: Field[] = [
       { label: "User", value: "user" },
     ],
   },
-  { name: "isActive", label: "Active", type: "boolean" },
-  { name: "DOB", label: "DOB", type: "date" },
+  { value: "isActive", label: "Active", type: "boolean" },
+  { value: "DOB", label: "DOB", type: "date" },
 ];
 
 const productFields: Field[] = [
-  { name: "title", label: "Title", type: "text" },
-  { name: "price", label: "Price", type: "number" },
+  { value: "title", label: "Title", type: "text" },
+  { value: "price", label: "Price", type: "number" },
   {
-    name: "category",
+    value: "category",
     label: "Category",
     type: "select",
     options: [
@@ -31,7 +31,7 @@ const productFields: Field[] = [
       { label: "Clothing", value: "clothing" },
     ],
   },
-  { name: "releasedAt", label: "Released", type: "date" },
+  { value: "releasedAt", label: "Released", type: "date" },
 ];
 
 const ops: OperatorConfig = {

@@ -48,7 +48,7 @@ describe("serialization Util", () => {
   describe("initial group data", () => {
     const fields: Field[] = [
       {
-        name: "name",
+        value: "name",
         label: "Name",
         type: "text",
       },
