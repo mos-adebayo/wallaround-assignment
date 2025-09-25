@@ -4,12 +4,12 @@ export const mockFields: Field[] = [
   { value: "name", label: "Name", type: "text" },
   { value: "amount", label: "Amount", type: "number" },
   {
-    value: "status",
-    label: "Status",
+    value: "country",
+    label: "Country",
     type: "select",
     options: [
-      { value: "active", label: "Active" },
-      { value: "inactive", label: "Inactive" },
+      { value: "nigeria", label: "Nigeria" },
+      { value: "germany", label: "Germany" },
     ],
   },
 ];

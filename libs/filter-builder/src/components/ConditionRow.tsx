@@ -111,9 +111,15 @@ export const ConditionRow: FC<Props> = ({
         {selectedField?.type === "select" ? (
           <TextField
             select
-            name="documentType"
+            name={selectedField?.value}
             value={value.value ?? ""}
             size="small"
+            placeholder="Select Option"
+            slotProps={{
+              htmlInput: {
+                "aria-label": "Select option",
+              },
+            }}
             fullWidth
             sx={{ minWidth: { xs: 50, lg: 100 } }}
             onChange={(e) => onChange({ ...value, value: e.target.value })}

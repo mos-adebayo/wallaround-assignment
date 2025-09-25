@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import ConditionRow from "../ConditionRow";
 import { mockFields } from "../../mocks/fields";
 import { mockOperators, mockRule } from "../../mocks/rule";
@@ -77,5 +77,22 @@ describe("ConditionRow", () => {
   it("calls onRemove when remove button is clicked", () => {
     fireEvent.click(screen.getByText("Remove"));
     expect(mockOnRemove).toHaveBeenCalledTimes(1);
+  });
+
+  it("handles field type appropriately", async () => {
+    const fieldSelect = screen.getByPlaceholderText("Select field");
+    fireEvent.change(fieldSelect, {
+      target: { value: "amount" },
+    });
+    fireEvent.keyDown(fieldSelect, { key: "ArrowDown" });
+    fireEvent.keyDown(fieldSelect, { key: "ArrowDown" });
+    fireEvent.keyDown(fieldSelect, { key: "Enter" });
+
+    expect(mockOnChange).toHaveBeenCalled();
+    expect(mockOnChange).toHaveBeenCalledWith({
+      field: "country",
+      operator: "eq",
+      value: undefined,
+    });
   });
 });
