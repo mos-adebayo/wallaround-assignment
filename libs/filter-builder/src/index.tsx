@@ -3,12 +3,12 @@ import { ThemeProvider } from "@mui/material/styles";
 import type { FilterBuilderProps, Group, Rule } from "./types";
 import { GroupEditor } from "./components/GroupEditor";
 import {
-  emptyGroup,
   validateRule,
   serializeToQueryString,
+  initialGroupData,
 } from "./utils/serializer";
 import theme from "./theme";
-import { Stack, Typography } from "@mui/material";
+import { Chip, Stack, Typography } from "@mui/material";
 
 export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   schema,
@@ -17,7 +17,9 @@ export const FilterBuilder: React.FC<FilterBuilderProps> = ({
   api,
   onChange,
 }) => {
-  const [root, setRoot] = React.useState<Group>(initial ?? emptyGroup("and"));
+  const [root, setRoot] = React.useState<Group>(
+    initial ?? initialGroupData(schema, operators, "and"),
+  );
 
   React.useEffect(() => {
     const qs = api?.mode === "GET" ? serializeToQueryString(root) : undefined;
@@ -43,18 +45,29 @@ export const FilterBuilder: React.FC<FilterBuilderProps> = ({
     return true;
   }
 
+  const isValidRule = validateAll(root);
+
   return (
     <ThemeProvider theme={theme}>
-      <Stack gap={1}>
+      <Stack gap={1.5}>
         <GroupEditor
           fields={schema}
           operators={operators}
           node={root}
           onChange={updateRoot}
         />
-        <Typography>
-          <strong>Valid:</strong> {String(validateAll(root))}
-        </Typography>
+
+        <Stack direction="row" alignItems="center" gap={1}>
+          <Typography variant="subtitle1" fontWeight="bold">
+            Validity:
+          </Typography>
+
+          {isValidRule ? (
+            <Chip label="Valid" size="small" color="success" />
+          ) : (
+            <Chip label="Invalid" size="small" color="error" />
+          )}
+        </Stack>
 
         <Typography
           component="pre"

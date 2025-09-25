@@ -1,12 +1,12 @@
 import React from "react";
-import type { Condition, Field, Group, Rule } from "../types";
+import { Condition, Field, Group, OperatorConfig, Rule } from "../types";
 import { ConditionRow } from "./ConditionRow";
-import { emptyGroup } from "../utils/serializer";
+import { initialGroupData } from "../utils/serializer";
 import { Box, Button, Divider, Stack, Typography, Grid } from "@mui/material";
 
 type Props = {
   fields: Field[];
-  operators: Record<string, string[]>;
+  operators: OperatorConfig;
   node: Group;
   onChange: (g: Group) => void;
   onRemove?: () => void;
@@ -46,7 +46,7 @@ export const GroupEditor: React.FC<Props> = ({
     }
   }
   function addGroup() {
-    const newGroup = emptyGroup("and");
+    const newGroup = initialGroupData(fields, operators, "and");
     if ("and" in node) {
       onChange({ and: [...node.and, newGroup] });
     } else {

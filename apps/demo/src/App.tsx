@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FilterBuilder } from "@wallaround/filter-builder";
 import type { Field, OperatorConfig } from "@wallaround/filter-builder";
-import { Container, Stack, Typography } from "@mui/material";
+import {Container, Divider, Stack, Typography} from "@mui/material";
 
 const userFields: Field[] = [
   { name: "name", label: "Name", type: "string" },
@@ -57,8 +57,8 @@ function App() {
   return (
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" mb={2}>Wallaround: Filter Builder</Typography>
-      <Stack gap={1}>
-        <Stack component="section" gap={1}>
+      <Stack gap={2}>
+        <Stack component="section">
           <Typography variant="h5">Users</Typography>
           <FilterBuilder
             schema={userFields}
@@ -68,7 +68,9 @@ function App() {
           />
         </Stack>
 
-        <Stack component="section" gap={1}>
+        <Divider />
+
+        <Stack component="section">
           <Typography variant="h5">Products</Typography>
           <FilterBuilder
             schema={productFields}

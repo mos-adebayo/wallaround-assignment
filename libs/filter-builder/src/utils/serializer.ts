@@ -1,4 +1,4 @@
-import type { Group, Rule, Condition } from "../types";
+import { Group, Rule, Condition, Field, OperatorConfig } from "../types";
 
 export function serializeToQueryString(json: Group) {
   // simple compact encoding: base64 of JSON
@@ -28,8 +28,18 @@ export function deserializeFromQueryString(qs: string): Group | null {
   }
 }
 
-export function emptyGroup(type: Condition = "and"): Group {
-  return type === "and" ? { and: [] } : { or: [] };
+export function initialGroupData(
+  fields: Field[],
+  operators: OperatorConfig,
+  type: Condition = "and",
+): Group {
+  const initialField = fields[0];
+  const initialOperator = operators[initialField.type][0] || "";
+
+  const initialRule = initialField
+    ? [{ field: initialField.name, operator: initialOperator }]
+    : [];
+  return type === "and" ? { and: initialRule } : { or: initialRule };
 }
 
 // validation helper
