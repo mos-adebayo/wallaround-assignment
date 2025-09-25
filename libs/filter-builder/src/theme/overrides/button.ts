@@ -83,6 +83,7 @@ const Button: Components<Theme>["MuiButton"] = {
       fontWeight: 400,
       padding: "0.6rem 2rem",
       borderRadius: "20px",
+      textTransform: "capitalize",
       lineHeight: "1.5rem",
       boxShadow: "none",
       ".MuiButton-startIcon": {

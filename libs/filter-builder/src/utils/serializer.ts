@@ -1,31 +1,34 @@
 import { Group, Rule, Condition, Field, OperatorConfig } from "../types";
 
-export function serializeToQueryString(json: Group) {
-  // simple compact encoding: base64 of JSON
-  const str = JSON.stringify(json);
-  try {
-    return `filter=${encodeURIComponent(btoa(unescape(encodeURIComponent(str))))}`;
-  } catch (e) {
-    // fallback
-    return `filter=${encodeURIComponent(str)}`;
+function base64Encode(str: string) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
   }
+  return btoa(binary);
+}
+
+export function serializeToQueryString(json: Group) {
+  const str = JSON.stringify(json);
+  return `filter=${encodeURIComponent(base64Encode(str))}`;
+}
+
+function base64Decode(b64: string) {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new TextDecoder().decode(bytes);
 }
 
 export function deserializeFromQueryString(qs: string): Group | null {
-  const m = qs.match(/filter=([^&]+)/);
-  if (!m) return null;
-  try {
-    const decoded = decodeURIComponent(m[1]);
-    const jsonStr = atob(decoded);
-    return JSON.parse(decodeURIComponent(escape(jsonStr)));
-  } catch (e) {
-    try {
-      const decoded = decodeURIComponent(m[1]);
-      return JSON.parse(decoded);
-    } catch {
-      return null;
-    }
-  }
+  const params = new URLSearchParams(qs);
+  const filter = params.get("filter");
+  if (!filter) return null;
+
+  return JSON.parse(base64Decode(decodeURIComponent(filter)));
 }
 
 export function initialGroupData(

@@ -21,13 +21,13 @@ export type Group = { and: Array<Rule | Group> } | { or: Array<Rule | Group> };
 
 export type APIConfig = {
   mode: "GET" | "POST";
-  endpoint?: string;
+  endpoint: string;
 };
 
 export type FilterBuilderProps = {
   schema: Field[];
   operators: OperatorConfig;
   initial?: Group;
-  api?: APIConfig;
-  onChange?: (json: Group, qs?: string) => void;
+  api: APIConfig;
+  onSubmit: (json: Group, qs?: string) => void;
 };

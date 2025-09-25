@@ -52,39 +52,48 @@ const ops: OperatorConfig = {
 };
 
 function App() {
-  const [last, setLast] = useState<string>("");
+  const [lastEmit, setLastEmit] = useState<string>("");
 
   return (
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" mb={2}>Wallaround: Filter Builder</Typography>
       <Stack gap={2}>
         <Stack component="section">
-          <Typography variant="h5">Users</Typography>
+          <Typography variant="h5">Users (GET Action)</Typography>
           <FilterBuilder
             schema={userFields}
             operators={ops}
-            onChange={(json, qs) => setLast(JSON.stringify({ json, qs }))}
-            api={{ mode: "GET" }}
+            onSubmit={(json, qs) => setLastEmit(JSON.stringify({ json, qs }))}
+            api={{ mode: "GET", endpoint: "https://api/user/filter" }}
           />
         </Stack>
 
         <Divider />
 
         <Stack component="section">
-          <Typography variant="h5">Products</Typography>
+          <Typography variant="h5">Products (POST Action)</Typography>
           <FilterBuilder
             schema={productFields}
             operators={ops}
-            onChange={(json, qs) => setLast(JSON.stringify({ json, qs }))}
-            api={{ mode: "POST", endpoint: "/api/products/filter" }}
+            onSubmit={(json, qs) => setLastEmit(JSON.stringify({ json, qs }))}
+            api={{ mode: "POST", endpoint: "https://api/products/filter" }}
           />
         </Stack>
 
         <Stack component="section" gap={1}>
           <Typography variant="h5">Last emitted</Typography>
-          <pre className="bg-gray-800 text-gray-100 text-xs p-3 rounded mt-2">
-            {last}
-          </pre>
+          <Typography
+              component="pre"
+              sx={{
+                fontFamily: "Monospace",
+                backgroundColor: "#f5f5f5",
+                padding: 2,
+                borderRadius: 1,
+                overflowX: "auto",
+              }}
+          >
+            {lastEmit}
+          </Typography>
         </Stack>
       </Stack>
     </Container>

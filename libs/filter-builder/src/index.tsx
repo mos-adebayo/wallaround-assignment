@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import type { FC } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import type { FilterBuilderProps, Group, Rule } from "./types";
 import { GroupEditor } from "./components/GroupEditor";
@@ -8,23 +9,31 @@ import {
   initialGroupData,
 } from "./utils/serializer";
 import theme from "./theme";
-import { Chip, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Stack, Typography } from "@mui/material";
+import { getAction, postAction } from "./utils/api";
 
-export const FilterBuilder: React.FC<FilterBuilderProps> = ({
+export const FilterBuilder: FC<FilterBuilderProps> = ({
   schema,
   operators,
   initial,
   api,
-  onChange,
+  onSubmit,
 }) => {
-  const [root, setRoot] = React.useState<Group>(
+  const [root, setRoot] = useState<Group>(
     initial ?? initialGroupData(schema, operators, "and"),
   );
 
-  React.useEffect(() => {
-    const qs = api?.mode === "GET" ? serializeToQueryString(root) : undefined;
-    onChange?.(root, qs);
-  }, [root]);
+  function handleSubmit() {
+    const qs = api.mode === "GET" ? serializeToQueryString(root) : undefined;
+
+    if (api.mode === "GET") {
+      void getAction(api.endpoint, root);
+    } else if (api.mode === "POST") {
+      void postAction(api.endpoint, root);
+    }
+
+    onSubmit(root, qs);
+  }
 
   function updateRoot(g: Group) {
     setRoot(g);
@@ -49,13 +58,25 @@ export const FilterBuilder: React.FC<FilterBuilderProps> = ({
 
   return (
     <ThemeProvider theme={theme}>
-      <Stack gap={1.5}>
+      <Stack gap={2}>
         <GroupEditor
           fields={schema}
           operators={operators}
           node={root}
           onChange={updateRoot}
         />
+
+        <Box>
+          <Button
+            size="small"
+            disabled={!isValidRule}
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{ py: 1, px: 6 }}
+          >
+            Submit
+          </Button>
+        </Box>
 
         <Stack direction="row" alignItems="center" gap={1}>
           <Typography variant="subtitle1" fontWeight="bold">
