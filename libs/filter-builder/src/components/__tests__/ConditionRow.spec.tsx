@@ -20,7 +20,7 @@ describe("ConditionRow", () => {
     );
   });
 
-  it("renders rule inputs", () => {
+  it("renders rule inputs with default value", () => {
     expect(screen.getByPlaceholderText("Select field")).toHaveValue("Name");
     expect(screen.getByPlaceholderText("Select operator")).toHaveValue("eq");
     expect(
