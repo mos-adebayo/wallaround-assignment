@@ -104,36 +104,58 @@ describe("GroupEditor", () => {
     expect(getAllByText("CONDITION:")).toHaveLength(2);
   });
 
-  // it("calls onChange when group type is changed", () => {
-  //   const { getByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={mockGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   fireEvent.click(getByText("AND"));
-  //   expect(onChange).toHaveBeenCalledWith({ and: mockGroup.or });
-  //   fireEvent.click(getByText("OR"));
-  //   expect(onChange).toHaveBeenCalledWith({ or: mockGroup.or });
-  // });
-  //
-  // it("calls onChange when rule is updated", () => {
-  //   const { getAllByLabelText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={initialGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   fireEvent.change(getAllByLabelText("Value(s)")[0], {
-  //     target: { value: "inactive" },
-  //   });
-  //   expect(onChange).toHaveBeenCalled();
-  // });
-  //
+  it("calls onChange when group condition is changed", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    fireEvent.click(getByRole("button", { name: "OR" }));
+    expect(mockOnChange).toHaveBeenCalledWith({
+      or: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+      ],
+    });
+  });
+
+  it("calls onChange when rule is updated", () => {
+    const { getAllByPlaceholderText } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const fieldInputs = getAllByPlaceholderText("Select field");
+    expect(fieldInputs).toHaveLength(3);
+    fireEvent.change(fieldInputs[0], {
+      target: { value: "amount" },
+    });
+    fireEvent.keyDown(fieldInputs[0], { key: "ArrowDown" });
+    fireEvent.keyDown(fieldInputs[0], { key: "Enter" });
+
+    expect(mockOnChange).toHaveBeenCalledTimes(1);
+  });
+
   // it("calls onChange when rule is removed", () => {
   //   const { getByText } = render(
   //     <GroupEditor

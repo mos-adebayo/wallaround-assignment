@@ -79,8 +79,6 @@ export const GroupEditor: React.FC<Props> = ({
   const isGroupANDConditioned = rootKey === "and";
   const showGroupCondition = ruleList?.length > 1;
 
-  console.log(showGroupCondition, "length");
-
   return (
     <Stack gap={1.5}>
       <Grid container spacing={{ xs: 1, lg: 2 }} alignItems="stretch">
