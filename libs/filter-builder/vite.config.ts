@@ -10,7 +10,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["html", "text", "json-summary", "json"],
-      exclude: ["src/theme", "src/mocks", "src/types", "src/setup-test.ts", "vite.config.ts"],
+      exclude: ["src/theme", "src/mocks", "src/types", "src/setup-test.ts", "vite.config.ts", "src/**/*.d.ts", "*.js"],
       thresholds: {
         lines: 100,
         functions: 100,

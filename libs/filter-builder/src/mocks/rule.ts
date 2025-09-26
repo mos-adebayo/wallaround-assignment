@@ -18,6 +18,10 @@ export const mockORGroup: Group = {
   ],
 };
 
+export const mockValidatedRuleGroup = {
+  and: [{ field: "name", operator: "equals", value: "moses" }],
+};
+
 export const mockRuleGroup: Group = {
   and: [
     {

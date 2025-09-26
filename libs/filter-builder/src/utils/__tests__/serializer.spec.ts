@@ -57,6 +57,13 @@ describe("serialization Util", () => {
       text: ["in"],
     };
 
+    it("returns default initial group data with empty fields", () => {
+      const result = initialGroupData([], operators);
+      expect(result).toEqual({
+        and: [],
+      });
+    });
+
     it("returns valid initial group data", () => {
       const result = initialGroupData(fields, operators);
       expect(result).toEqual({
