@@ -12,4 +12,9 @@ export const mockFields: Field[] = [
       { value: "germany", label: "Germany" },
     ],
   },
+  {
+    value: "status",
+    label: "Is Active",
+    type: "boolean",
+  },
 ];

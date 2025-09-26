@@ -195,4 +195,25 @@ describe("ConditionRow", () => {
       value: "germany",
     });
   });
+
+  it("handles field with boolean type appropriately", async () => {
+    render(
+      <ConditionRow
+        fields={[{ ...mockFields[3] }]}
+        operators={mockOperators}
+        value={{ field: "status", operator: "eq", value: false }}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const input = screen.getByLabelText("Toggle");
+    fireEvent.click(input);
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      field: "status",
+      operator: "eq",
+      value: true,
+    });
+  });
 });

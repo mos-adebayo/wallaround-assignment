@@ -3,7 +3,14 @@ import { useEffect } from "react";
 import type { Field, Rule } from "../types";
 import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Box, Button, InputLabel, MenuItem, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputLabel,
+  MenuItem,
+  Switch,
+  TextField,
+} from "@mui/material";
 
 type Props = {
   fields: Field[];
@@ -23,14 +30,65 @@ export const ConditionRow: FC<Props> = ({
   const field = fields.find((f) => f.value === value.field) || fields[0];
   const ops = operators[field.type];
 
-  function setField(name: string) {
+  const setField = (name: string) => {
     const f = fields.find((ff) => ff.value === name)!;
     onChange({
       field: name,
       operator: operators[f.type]?.[0] || "eq",
       value: undefined,
     });
-  }
+  };
+
+  const renderValueInput = () => {
+    switch (selectedField?.type) {
+      case "select":
+        return (
+          <TextField
+            select
+            name={selectedField?.value}
+            value={value.value}
+            size="small"
+            placeholder="Select Option"
+            slotProps={{
+              htmlInput: {
+                "aria-label": "Select option",
+              },
+            }}
+            fullWidth
+            sx={{ minWidth: { xs: 50, lg: 100 } }}
+            onChange={(e) => onChange({ ...value, value: e.target.value })}
+          >
+            {selectedField?.options?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        );
+      case "boolean":
+        return (
+          <Switch
+            slotProps={{ input: { "aria-label": "Toggle" } }}
+            checked={Boolean(value.value)}
+            onChange={(e) => {
+              onChange({ ...value, value: e.target.checked });
+            }}
+          />
+        );
+      default:
+        return (
+          <TextField
+            fullWidth
+            name="ruleName"
+            size="small"
+            placeholder="Separate multiple values with comma"
+            value={value.value ?? ""}
+            type={valueType}
+            onChange={(e) => onChange({ ...value, value: e.target.value })}
+          />
+        );
+    }
+  };
 
   const valueType = useMemo(() => {
     const field = fields.find((f) => f.value === value.field);
@@ -97,39 +155,7 @@ export const ConditionRow: FC<Props> = ({
 
       <Grid size={{ xs: 12, lg: 4 }} order={{ xs: 4, lg: 3 }}>
         <InputLabel htmlFor="field">Value(s)</InputLabel>
-        {selectedField?.type === "select" ? (
-          <TextField
-            select
-            name={selectedField?.value}
-            value={value.value}
-            size="small"
-            placeholder="Select Option"
-            slotProps={{
-              htmlInput: {
-                "aria-label": "Select option",
-              },
-            }}
-            fullWidth
-            sx={{ minWidth: { xs: 50, lg: 100 } }}
-            onChange={(e) => onChange({ ...value, value: e.target.value })}
-          >
-            {selectedField?.options?.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        ) : (
-          <TextField
-            fullWidth
-            name="ruleName"
-            size="small"
-            placeholder="Separate multiple values with comma"
-            value={value.value ?? ""}
-            type={valueType}
-            onChange={(e) => onChange({ ...value, value: e.target.value })}
-          />
-        )}
+        {renderValueInput()}
       </Grid>
 
       <Grid size={{ xs: 12, lg: 2 }} order={{ xs: 1, lg: 4 }}>
