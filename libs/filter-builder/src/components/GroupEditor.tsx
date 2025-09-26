@@ -46,7 +46,7 @@ export const GroupEditor: React.FC<Props> = ({
     }
   }
   function addGroup() {
-    const newGroup = initialGroupData(fields, operators, "and");
+    const newGroup = initialGroupData(fields, operators, rootKey);
     if ("and" in node) {
       onChange({ and: [...node.and, newGroup] });
     } else {

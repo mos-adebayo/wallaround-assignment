@@ -10,7 +10,7 @@ export const mockGroup: Group = {
 };
 
 export const mockORGroup: Group = {
-  and: [
+  or: [
     {
       field: "name",
       operator: "eq",
@@ -61,5 +61,5 @@ export const mockRule = { field: "name", operator: "eq", value: "test" };
 export const mockOperators = {
   select: ["eq", "ne"],
   number: ["gt", "lt"],
-  text: ["contains", "eq"],
+  text: ["eq", "contains"],
 };

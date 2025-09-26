@@ -147,96 +147,219 @@ describe("GroupEditor", () => {
 
     const fieldInputs = getAllByPlaceholderText("Select field");
     expect(fieldInputs).toHaveLength(3);
+
     fireEvent.change(fieldInputs[0], {
       target: { value: "amount" },
     });
     fireEvent.keyDown(fieldInputs[0], { key: "ArrowDown" });
     fireEvent.keyDown(fieldInputs[0], { key: "Enter" });
 
-    expect(mockOnChange).toHaveBeenCalledTimes(1);
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "amount",
+          operator: "gt",
+        },
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+      ],
+    });
+
+    const valueInputs = getAllByPlaceholderText(
+      "Separate multiple values with comma",
+    );
+    expect(valueInputs).toHaveLength(3);
+    fireEvent.change(valueInputs[0], {
+      target: { value: "test value" },
+    });
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "name",
+          operator: "eq",
+          value: "test value",
+        },
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+      ],
+    });
   });
 
-  // it("calls onChange when rule is removed", () => {
-  //   const { getByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={initialGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   fireEvent.click(getByText("Remove"));
-  //   expect(onChange).toHaveBeenCalledWith({ and: [] });
-  // });
-  //
-  // it("calls onRemove when remove group button is clicked", () => {
-  //   const { getByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={initialGroup}
-  //       onChange={mockOnChange}
-  //       onRemove={onRemove}
-  //     />,
-  //   );
-  //   fireEvent.click(getByText("Remove group"));
-  //   expect(onRemove).toHaveBeenCalled();
-  // });
-  //
-  // it("adds a new rule when Add Rule is clicked", () => {
-  //   const { getByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={initialGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   fireEvent.click(getByText("Add Rule"));
-  //   expect(onChange).toHaveBeenCalledWith({
-  //     and: [initialGroup.and[0], expect.objectContaining({ field: "status" })],
-  //   });
-  // });
-  //
-  // it("adds a new group when Add Group is clicked", () => {
-  //   const { getByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={initialGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   fireEvent.click(getByText("Add Group"));
-  //   expect(onChange.mock.calls[0][0].and.length).toBe(2);
-  //   expect(typeof onChange.mock.calls[0][0].and[1]).toBe("object");
-  //   expect("and" in onChange.mock.calls[0][0].and[1]).toBe(true);
-  // });
-  //
-  // it("removes a rule from OR group", () => {
-  //   const { getAllByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={mockGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   fireEvent.click(getAllByText("Remove")[1]);
-  //   expect(onChange).toHaveBeenCalledWith({ or: [mockGroup.or[0]] });
-  // });
-  //
-  // it("handles empty ruleList gracefully", () => {
-  //   const emptyGroup = { and: [] };
-  //   const { getByText } = render(
-  //     <GroupEditor
-  //       fields={mockFields}
-  //       operators={mockOperators}
-  //       node={emptyGroup}
-  //       onChange={mockOnChange}
-  //     />,
-  //   );
-  //   expect(getByText("Add Rule")).toBeTruthy();
-  //   expect(getByText("Add Group")).toBeTruthy();
-  // });
+  it("calls onChange when rule is removed", () => {
+    const { getAllByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const removeRuleButtons = getAllByRole("button", { name: "X Remove" });
+    expect(removeRuleButtons).toHaveLength(3);
+
+    fireEvent.click(removeRuleButtons[0]);
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+      ],
+    });
+  });
+
+  it("calls onRemove when remove group button is clicked", () => {
+    const { getAllByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleMultiGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const removeButtons = getAllByRole("button", { name: "Remove group" });
+    expect(removeButtons).toHaveLength(2);
+
+    fireEvent.click(removeButtons[0]);
+
+    expect(mockOnRemove).toHaveBeenCalledTimes(1);
+  });
+
+  it("adds a new rule when Add Rule is clicked", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: "Add Rule" }));
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+        {
+          field: "name",
+          operator: "eq",
+        },
+      ],
+    });
+  });
+
+  it("adds a new AND group when Add Group is clicked", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: "Add Group" }));
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+        {
+          and: [
+            {
+              field: "name",
+              operator: "eq",
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("adds a new OR group when Add Group is clicked", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockORGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: "Add Group" }));
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      or: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          or: [
+            {
+              field: "name",
+              operator: "eq",
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("handles empty ruleList gracefully", () => {
+    const emptyGroup = { and: [] };
+    const { getByText } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={emptyGroup}
+        onChange={mockOnChange}
+      />,
+    );
+    expect(getByText("Add Rule")).toBeTruthy();
+    expect(getByText("Add Group")).toBeTruthy();
+  });
 });

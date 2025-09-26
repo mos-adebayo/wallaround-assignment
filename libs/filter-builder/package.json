@@ -1,5 +1,6 @@
 {
   "name": "@wallaround/filter-builder",
+  "description": "Dataset‑agnostic Filter Builder UI library ",
   "private": true,
   "version": "0.0.1",
   "type": "module",
