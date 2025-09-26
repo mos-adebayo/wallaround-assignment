@@ -60,6 +60,24 @@ function App() {
         Wallaround: Filter Builder
       </Typography>
       <Stack gap={2}>
+        <Stack component="section" gap={1}>
+          <Typography variant="h5" component="h4">
+            Last emitted
+          </Typography>
+          <Typography
+            component="pre"
+            sx={{
+              fontFamily: "Monospace",
+              backgroundColor: "#f5f5f5",
+              padding: 2,
+              borderRadius: 1,
+              overflowX: "auto",
+            }}
+          >
+            {lastEmit || "No emit yet!"}
+          </Typography>
+        </Stack>
+
         <Stack gap={2} component="section">
           <Typography variant="h4" component="h2">
             Users (GET Action)
@@ -84,24 +102,6 @@ function App() {
             onSubmit={(json, qs) => setLastEmit(JSON.stringify({ json, qs }))}
             api={{ mode: "POST", endpoint: "https://api/products/filter" }}
           />
-        </Stack>
-
-        <Stack component="section" gap={1}>
-          <Typography variant="h5" component="h4">
-            Last emitted
-          </Typography>
-          <Typography
-            component="pre"
-            sx={{
-              fontFamily: "Monospace",
-              backgroundColor: "#f5f5f5",
-              padding: 2,
-              borderRadius: 1,
-              overflowX: "auto",
-            }}
-          >
-            {lastEmit || "No emit yet!"}
-          </Typography>
         </Stack>
       </Stack>
     </Container>
