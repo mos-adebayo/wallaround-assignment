@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# Wallaround Take Home Assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Goal
+- A reusable, dataset‑agnostic Filter Builder UI library that allows users to
+construct arbitrary nested conditions (and / or groups) and serialize them into a
+JSON structure.
+- The library must be schema‑driven (fields, types, operators provided via config)
+and support sending filters to a server via: GET (as a query string parameter) & POST (as JSON body)
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project structure
 
-## React Compiler
+The application is structured using a monorepo architecture, which includes the filter builder library `(/libs/filter-builder)` and a demo application `(/apps/demo)`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Installation
+``
+ npm install
+``
 
-## Expanding the ESLint configuration
+## Running the Project
+Go to the demo folder
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+``
+cd apps/demo
+``
 
+Run the start command
+
+``
+ npm run dev
+``
+
+Project will start running on port 3000
+
+``
+ http://localhost:3000/
+``
+
+## Available Scripts 
+
+### 1. Running test
+
+`` npm run test``
+
+### 2. Running test coverage
+
+`` npm run test:coverage``
+
+### 3. Format code  styling
+
+`` npm run format``
+
+### 4. Code Type check
+
+`` npm run type-check``
+
+## Configuration API
+
+### The FilterBuilder Library accept the following Props
 ```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+const props = {
+    schema, // Available fields for the Filter builder. Each field consist of the label, type and value
+    operator, // This consists of all the operators available for each field type
+    initial, // optional initial value for the Filter builder library
+    api, // holds the Request action type and endpoint the library can use to send filters to a server
+    onSubmit // this calback is fired when the submit button is clicked
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### onSubmit Action
+1. The submit button is enabled when all the rules in the group are valid based on the operator
+2. The library returns the filter JSON data and serialized query string 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Architecture Decisions
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. I structured the library around two main components: `GroupEditor` and `ConditionRow`. GroupEditor recursively renders child groups or conditions, while ConditionRow handles individual conditions, enabling support for infinitely nested AND/OR groups.
+2. Extensibility: The filter builder’s props are fully configurable, allowing the library to adapt flexibly to diverse domains and use cases.
+3. I implemented a monorepo architecture to host both the library and its demo application in a single repository, enhancing development efficiency and maintaining consistent tooling.
+4. I selected Material-UI as the design system due to its built-in accessibility features and comprehensive library of reusable components, enabling faster development and a consistent, user-friendly interface.
+5. I ensured 100% test coverage for the library codebase, through thorough validation of all logic and supporting long-term reliability.

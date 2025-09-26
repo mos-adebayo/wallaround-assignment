@@ -61,7 +61,9 @@ function App() {
       </Typography>
       <Stack gap={2}>
         <Stack gap={2} component="section">
-          <Typography variant="h4" component="h2">Users (GET Action)</Typography>
+          <Typography variant="h4" component="h2">
+            Users (GET Action)
+          </Typography>
           <FilterBuilder
             schema={userFields}
             operators={ops}
@@ -73,7 +75,9 @@ function App() {
         <Divider />
 
         <Stack gap={2} component="section">
-          <Typography variant="h4" component="h2">Products (POST Action)</Typography>
+          <Typography variant="h4" component="h2">
+            Products (POST Action)
+          </Typography>
           <FilterBuilder
             schema={productFields}
             operators={ops}
@@ -83,7 +87,9 @@ function App() {
         </Stack>
 
         <Stack component="section" gap={1}>
-          <Typography variant="h5" component="h4">Last emitted</Typography>
+          <Typography variant="h5" component="h4">
+            Last emitted
+          </Typography>
           <Typography
             component="pre"
             sx={{
