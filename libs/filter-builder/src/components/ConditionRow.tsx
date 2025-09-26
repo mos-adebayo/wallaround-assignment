@@ -21,18 +21,13 @@ export const ConditionRow: FC<Props> = ({
   onRemove,
 }) => {
   const field = fields.find((f) => f.value === value.field) || fields[0];
-  const ops = field ? operators[field.type] || [] : [];
-
-  useEffect(() => {
-    if (!value.field && fields[0])
-      onChange({ ...value, field: fields[0].value });
-  }, []);
+  const ops = operators[field.type];
 
   function setField(name: string) {
     const f = fields.find((ff) => ff.value === name)!;
     onChange({
       field: name,
-      operator: (operators[f.type] && operators[f.type][0]) || "eq",
+      operator: operators[f.type]?.[0] || "eq",
       value: undefined,
     });
   }
@@ -61,9 +56,6 @@ export const ConditionRow: FC<Props> = ({
           size="small"
           options={fields}
           getOptionLabel={(option) => {
-            if (!option) {
-              return "";
-            }
             return option.label;
           }}
           onChange={(_, val) => {
@@ -88,9 +80,6 @@ export const ConditionRow: FC<Props> = ({
           size="small"
           options={ops}
           getOptionLabel={(option) => {
-            if (!option) {
-              return "";
-            }
             return option;
           }}
           onChange={(_, val) => {
@@ -112,7 +101,7 @@ export const ConditionRow: FC<Props> = ({
           <TextField
             select
             name={selectedField?.value}
-            value={value.value ?? ""}
+            value={value.value}
             size="small"
             placeholder="Select Option"
             slotProps={{
