@@ -216,4 +216,29 @@ describe("ConditionRow", () => {
       value: true,
     });
   });
+
+  it("handles field with number type appropriately", async () => {
+    render(
+      <ConditionRow
+        fields={mockFields}
+        operators={mockOperators}
+        value={{ field: "amount", operator: "gt", value: 40 }}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const valueField = screen.getByPlaceholderText(
+      "Separate multiple values with comma",
+    );
+    fireEvent.change(valueField, {
+      target: { value: "45" },
+    });
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      field: "amount",
+      operator: "gt",
+      value: 45,
+    });
+  });
 });
