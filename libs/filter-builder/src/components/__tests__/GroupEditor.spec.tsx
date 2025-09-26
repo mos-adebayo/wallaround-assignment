@@ -8,6 +8,7 @@ import {
   mockORGroup,
   mockRuleGroup,
   mockRuleMultiGroup,
+  mockORRuleGroup,
 } from "../../mocks/rule";
 
 describe("GroupEditor", () => {
@@ -104,7 +105,7 @@ describe("GroupEditor", () => {
     expect(getAllByText("CONDITION:")).toHaveLength(2);
   });
 
-  it("calls onChange when group condition is changed", () => {
+  it("calls onChange when group condition is changed: AND root node", () => {
     const { getByRole } = render(
       <GroupEditor
         fields={mockFields}
@@ -118,6 +119,51 @@ describe("GroupEditor", () => {
     fireEvent.click(getByRole("button", { name: "OR" }));
     expect(mockOnChange).toHaveBeenCalledWith({
       or: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          field: "age",
+          operator: "eq",
+        },
+        {
+          field: "active",
+          operator: "is not null",
+        },
+      ],
+    });
+  });
+
+  it("onChange is not called when group condition does not change", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    fireEvent.click(getByRole("button", { name: "AND" }));
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
+
+  it("calls onChange when group condition is changed: OR root node", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockORRuleGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    fireEvent.click(getByRole("button", { name: "AND" }));
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
         {
           field: "name",
           operator: "eq",
@@ -198,7 +244,7 @@ describe("GroupEditor", () => {
     });
   });
 
-  it("calls onChange when rule is removed", () => {
+  it("calls onChange when rule is removed with AND root node", () => {
     const { getAllByRole } = render(
       <GroupEditor
         fields={mockFields}
@@ -228,6 +274,27 @@ describe("GroupEditor", () => {
     });
   });
 
+  it("calls onChange when rule is removed with OR root node", () => {
+    const { getAllByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockORGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const removeRuleButtons = getAllByRole("button", { name: "X Remove" });
+    expect(removeRuleButtons).toHaveLength(1);
+
+    fireEvent.click(removeRuleButtons[0]);
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      or: [],
+    });
+  });
+
   it("calls onRemove when remove group button is clicked", () => {
     const { getAllByRole } = render(
       <GroupEditor
@@ -247,7 +314,7 @@ describe("GroupEditor", () => {
     expect(mockOnRemove).toHaveBeenCalledTimes(1);
   });
 
-  it("adds a new rule when Add Rule is clicked", () => {
+  it("adds a new rule for a Group with AND root node", () => {
     const { getByRole } = render(
       <GroupEditor
         fields={mockFields}
@@ -272,6 +339,58 @@ describe("GroupEditor", () => {
         {
           field: "active",
           operator: "is not null",
+        },
+        {
+          field: "name",
+          operator: "eq",
+        },
+      ],
+    });
+  });
+
+  it("adds a new rule for a Group with OR root node", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockORGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: "Add Rule" }));
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      or: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          field: "name",
+          operator: "eq",
+        },
+      ],
+    });
+  });
+
+  it("adds a new rule with operator fallback", () => {
+    const { getByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={{}}
+        node={mockORGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: "Add Rule" }));
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      or: [
+        {
+          field: "name",
+          operator: "eq",
         },
         {
           field: "name",

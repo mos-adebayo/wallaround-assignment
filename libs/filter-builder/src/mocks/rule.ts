@@ -22,6 +22,23 @@ export const mockValidatedRuleGroup = {
   and: [{ field: "name", operator: "equals", value: "moses" }],
 };
 
+export const mockORRuleGroup: Group = {
+  or: [
+    {
+      field: "name",
+      operator: "eq",
+    },
+    {
+      field: "age",
+      operator: "eq",
+    },
+    {
+      field: "active",
+      operator: "is not null",
+    },
+  ],
+};
+
 export const mockRuleGroup: Group = {
   and: [
     {
