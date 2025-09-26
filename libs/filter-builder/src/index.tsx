@@ -55,7 +55,7 @@ export const FilterBuilder: FC<FilterBuilderProps> = ({
 
   return (
     <ThemeProvider theme={theme}>
-      <Stack gap={2}>
+      <Stack gap={2} component="form">
         <GroupEditor
           fields={schema}
           operators={operators}
@@ -76,7 +76,7 @@ export const FilterBuilder: FC<FilterBuilderProps> = ({
         </Box>
 
         <Stack direction="row" alignItems="center" gap={1}>
-          <Typography variant="subtitle1" fontWeight="bold">
+          <Typography variant="subtitle1" fontWeight="bold" component="h3">
             Validity:
           </Typography>
 

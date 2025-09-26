@@ -1,16 +1,8 @@
 import { FC, useMemo } from "react";
-import { useEffect } from "react";
 import type { Field, Rule } from "../types";
 import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
-import {
-  Box,
-  Button,
-  InputLabel,
-  MenuItem,
-  Switch,
-  TextField,
-} from "@mui/material";
+import { Box, Button, MenuItem, Switch, TextField } from "@mui/material";
 
 type Props = {
   fields: Field[];
@@ -45,7 +37,7 @@ export const ConditionRow: FC<Props> = ({
         return (
           <TextField
             select
-            name={selectedField?.value}
+            name="fieldValue"
             value={value.value}
             size="small"
             placeholder="Select Option"
@@ -68,6 +60,7 @@ export const ConditionRow: FC<Props> = ({
       case "boolean":
         return (
           <Switch
+            name="fieldValue"
             slotProps={{ input: { "aria-label": "Toggle" } }}
             checked={Boolean(value.value)}
             onChange={(e) => {
@@ -79,7 +72,8 @@ export const ConditionRow: FC<Props> = ({
         return (
           <TextField
             fullWidth
-            name="ruleName"
+            label="Value"
+            name="fieldValue"
             size="small"
             placeholder="Separate multiple values with comma"
             value={value.value ?? ""}
@@ -114,7 +108,6 @@ export const ConditionRow: FC<Props> = ({
   return (
     <Grid container spacing={{ xs: 1, lg: 2 }} alignItems="stretch">
       <Grid size={{ xs: 6, lg: 3 }} order={{ xs: 2, lg: 1 }}>
-        <InputLabel htmlFor="field">Field</InputLabel>
         <Autocomplete
           freeSolo={false}
           value={selectedField}
@@ -132,13 +125,14 @@ export const ConditionRow: FC<Props> = ({
               {...params}
               placeholder="Select field"
               variant="outlined"
+              name="field"
+              label="Field"
             />
           )}
         />
       </Grid>
 
       <Grid size={{ xs: 6, lg: 3 }} order={{ xs: 3, lg: 2 }}>
-        <InputLabel htmlFor="field">Operator</InputLabel>
         <Autocomplete
           freeSolo={false}
           value={value.operator}
@@ -156,13 +150,14 @@ export const ConditionRow: FC<Props> = ({
               {...params}
               placeholder="Select operator"
               variant="outlined"
+              label="Operator"
+              name="operator"
             />
           )}
         />
       </Grid>
 
       <Grid size={{ xs: 12, lg: 4 }} order={{ xs: 4, lg: 3 }}>
-        <InputLabel htmlFor="field">Value(s)</InputLabel>
         {renderValueInput()}
       </Grid>
 
