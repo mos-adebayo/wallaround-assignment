@@ -295,6 +295,66 @@ describe("GroupEditor", () => {
     });
   });
 
+  it("handles remove group in multi group rule", () => {
+    const { getAllByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleMultiGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const removeRuleButtons = getAllByRole("button", { name: "Remove group" });
+    expect(removeRuleButtons).toHaveLength(2);
+
+    fireEvent.click(removeRuleButtons[1]);
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+      ],
+    });
+  });
+
+  it("handles change in multi group rule", () => {
+    const { getAllByRole } = render(
+      <GroupEditor
+        fields={mockFields}
+        operators={mockOperators}
+        node={mockRuleMultiGroup}
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const removeRuleButtons = getAllByRole("button", { name: "X Remove" });
+    expect(removeRuleButtons).toHaveLength(3);
+
+    fireEvent.click(removeRuleButtons[1]);
+
+    expect(mockOnChange).toHaveBeenCalledWith({
+      and: [
+        {
+          field: "name",
+          operator: "eq",
+        },
+        {
+          or: [
+            {
+              field: "active",
+              operator: "is not null",
+            },
+          ],
+        },
+      ],
+    });
+  });
+
   it("calls onRemove when remove group button is clicked", () => {
     const { getAllByRole } = render(
       <GroupEditor
