@@ -78,3 +78,7 @@ const props = {
 3. I implemented a monorepo architecture to host both the library and its demo application in a single repository, enhancing development efficiency and maintaining consistent tooling.
 4. I selected Material-UI as the design system due to its built-in accessibility features and comprehensive library of reusable components, enabling faster development and a consistent, user-friendly interface.
 5. I ensured 100% test coverage for the library codebase, through thorough validation of all logic and supporting long-term reliability.
+
+## Filter Builder UI
+
+<img width="2291" height="1440" alt="Screenshot 2025-09-26 at 14 51 20" src="https://github.com/user-attachments/assets/1cfaf01b-7e9b-4862-99da-5935746ff1a0" />
