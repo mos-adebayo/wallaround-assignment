@@ -84,7 +84,15 @@ export const ConditionRow: FC<Props> = ({
             placeholder="Separate multiple values with comma"
             value={value.value ?? ""}
             type={valueType}
-            onChange={(e) => onChange({ ...value, value: e.target.value })}
+            onChange={(e) =>
+              onChange({
+                ...value,
+                value:
+                  valueType === "number"
+                    ? Number(e.target.value)
+                    : e.target.value,
+              })
+            }
           />
         );
     }
