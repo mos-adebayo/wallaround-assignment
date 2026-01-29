@@ -11,7 +11,7 @@ function base64Encode(str: string) {
 
 export function serializeToQueryString(json: Group) {
   const str = JSON.stringify(json);
-  return `${encodeURIComponent(base64Encode(str))}`;
+  return `${encodeURIComponent(str)}`;
 }
 
 function base64Decode(b64: string) {
