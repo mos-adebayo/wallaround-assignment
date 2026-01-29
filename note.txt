@@ -1,0 +1,20 @@
+TODO
+1. Connect payload to API
+2. Have a better way to accept multiple values
+3. Look and Feel
+4. Validate at the point of adding rule
+5.
+
+/*
+
+// generic
+function getLastElement<F extends (...args: any[]) => >(arr: Parameters<F>[]): object {
+  return arr[arr.length - 1];
+}
+
+
+function processValue(value?: any): any {
+// return value ?? "v;
+// return value || "v";
+}
+// openapi*/
